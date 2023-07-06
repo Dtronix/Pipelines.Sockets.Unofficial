@@ -36,7 +36,7 @@ namespace Pipelines.Sockets.Unofficial
         /// <summary>
         /// Create a new UnmanagedMemoryManager instance at the given pointer and size
         /// </summary>
-        [CLSCompliant(false)]
+        //[CLSCompliant(false)]
 #pragma warning disable CS8500 // T* - would prefer void*, but can't change API
         public UnmanagedMemoryManager(T* pointer, int length) : this((void*)pointer, length) {}
 #pragma warning restore CS8500

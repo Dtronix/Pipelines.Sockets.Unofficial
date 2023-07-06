@@ -49,7 +49,7 @@ namespace Pipelines.Sockets.Unofficial.Threading
             /// Compare two LockToken instances for equality
             /// </summary>
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            [CLSCompliant(false)]
+            //[CLSCompliant(false)]
             public bool Equals(in LockToken other)
             {
                 if (_parent is not null) return ReferenceEquals(_parent, other._parent);

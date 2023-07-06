@@ -45,7 +45,7 @@ namespace Pipelines.Sockets.Unofficial.Arenas
         /// Tests two sequences for equality
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [CLSCompliant(false)]
+        //[CLSCompliant(false)]
         public bool Equals(in Sequence other)
             => IsEmpty ? other.IsEmpty // all empty sequences are equal - in part because default is type-less
                 : (_startObj == other._startObj
@@ -246,7 +246,7 @@ namespace Pipelines.Sockets.Unofficial.Arenas
         /// Tests two sequences for equality
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [CLSCompliant(false)]
+        //[CLSCompliant(false)]
         public bool Equals(in Sequence<T> other)
             => IsEmpty ? other.IsEmpty // all empty sequences are equal - in part because default is type-less
                 : (_startObj == other._startObj

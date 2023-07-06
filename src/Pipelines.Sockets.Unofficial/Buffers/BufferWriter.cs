@@ -402,7 +402,7 @@ namespace Pipelines.Sockets.Unofficial.Buffers
                 IncrLiveCount();
             }
 
-            public new void Setup(Memory<T> memory, RefCountedSegment previous)
+            public void Setup(Memory<T> memory, RefCountedSegment previous)
             {
                 base.Setup(memory, previous);
                 _count = 1;
@@ -519,11 +519,11 @@ namespace Pipelines.Sockets.Unofficial.Buffers
 
             private sealed class ArrayPoolRefCountedSegment : RefCountedSegment
             {
-                private readonly Stack<ArrayPoolRefCountedSegment>? _segmentPool;
+                private readonly Stack<ArrayPoolRefCountedSegment> _segmentPool;
 
                 private readonly ArrayPool<T> _arrayPool;
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public ArrayPoolRefCountedSegment(Stack<ArrayPoolRefCountedSegment>? segmentPool, ArrayPool<T> arrayPool, Memory<T> memory, RefCountedSegment previous)
+                public ArrayPoolRefCountedSegment(Stack<ArrayPoolRefCountedSegment> segmentPool, ArrayPool<T> arrayPool, Memory<T> memory, RefCountedSegment previous)
                     : base(memory, previous)
                 {
                     _segmentPool = segmentPool;
