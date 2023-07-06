@@ -11,7 +11,7 @@ namespace Pipelines.Sockets.Unofficial
     /// <summary>
     /// Provides utility methods for working with delegates
     /// </summary>
-    public static class Delegates
+    internal static class Delegates
     {
         /// <summary>
         /// Iterate over the individual elements of a multicast delegate (without allocation)

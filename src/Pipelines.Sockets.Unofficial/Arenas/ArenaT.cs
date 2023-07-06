@@ -15,7 +15,7 @@ namespace Pipelines.Sockets.Unofficial.Arenas
     /// Flags that impact behaviour of the arena
     /// </summary>
     [Flags]
-    public enum ArenaFlags
+    internal enum ArenaFlags
     {
         /// <summary>
         /// None
@@ -65,7 +65,7 @@ namespace Pipelines.Sockets.Unofficial.Arenas
     /// <summary>
     /// Represents a lifetime-bound allocator of multiple non-contiguous memory regions
     /// </summary>
-    public sealed class Arena<T> : IDisposable, IArena<T>
+    internal sealed class Arena<T> : IDisposable, IArena<T>
     {
         Type IArena.ElementType => typeof(T);
 

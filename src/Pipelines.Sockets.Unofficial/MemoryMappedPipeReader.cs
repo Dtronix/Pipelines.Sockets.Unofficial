@@ -17,7 +17,7 @@ namespace Pipelines.Sockets.Unofficial
     /// <summary>
     /// Represents a pipe that iterates over a memory-mapped file
     /// </summary>
-    public sealed class MemoryMappedPipeReader : PipeReader, IDisposable
+    internal sealed class MemoryMappedPipeReader : PipeReader, IDisposable
     {
         private MemoryMappedFile _file;
         private readonly int _pageSize;

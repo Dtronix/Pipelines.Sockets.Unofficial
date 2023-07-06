@@ -326,7 +326,7 @@ namespace Pipelines.Sockets.Unofficial.Tests
         [Theory]
         [InlineData(WaitOptions.None)]
         [InlineData(WaitOptions.DisableAsyncContext)]
-        public void CompetingCallerAllExecute(WaitOptions waitOptions)
+        internal void CompetingCallerAllExecute(WaitOptions waitOptions)
         {
             object allReady = new object(), allDone = new object();
             const int COMPETITORS = 5;
@@ -368,7 +368,7 @@ namespace Pipelines.Sockets.Unofficial.Tests
         [Theory]
         [InlineData(WaitOptions.None)]
         [InlineData(WaitOptions.DisableAsyncContext)]
-        public async Task CompetingCallerAllExecuteAsync(WaitOptions waitOptions)
+        internal async Task CompetingCallerAllExecuteAsync(WaitOptions waitOptions)
         {
             object allReady = new object(), allDone = new object();
             const int COMPETITORS = 5;

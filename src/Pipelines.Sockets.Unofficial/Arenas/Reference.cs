@@ -9,7 +9,7 @@ namespace Pipelines.Sockets.Unofficial.Arenas
     /// <summary>
     /// Acts as a fly-weight reference into existing data
     /// </summary>
-    public readonly struct Reference<T> : IEquatable<Reference<T>>
+    internal readonly struct Reference<T> : IEquatable<Reference<T>>
     {
         /// <summary>
         /// Obtain a text representation of the value

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Pipelines.Sockets.Unofficial
 {
-    public partial class SocketConnection
+    internal partial class SocketConnection
     {
         private SocketAwaitableEventArgs _readerArgs;
 

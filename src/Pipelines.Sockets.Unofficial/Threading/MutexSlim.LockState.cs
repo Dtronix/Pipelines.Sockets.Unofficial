@@ -5,7 +5,7 @@ using System.Threading.Tasks.Sources;
 
 namespace Pipelines.Sockets.Unofficial.Threading
 {
-    public partial class MutexSlim
+    internal partial class MutexSlim
     {
         internal static class LockState
         {   // using this as a glorified enum; can't use enum directly because

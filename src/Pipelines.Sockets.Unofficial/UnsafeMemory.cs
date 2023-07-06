@@ -12,7 +12,7 @@ namespace Pipelines.Sockets.Unofficial
     /// A MemoryManager over a raw pointer
     /// </summary>
     /// <remarks>The pointer is assumed to be fully unmanaged, or externally pinned - no attempt will be made to pin this data</remarks>
-    public sealed unsafe class UnmanagedMemoryManager<T> : MemoryManager<T>
+    internal sealed unsafe class UnmanagedMemoryManager<T> : MemoryManager<T>
     {
         // where T : unmanaged
         // is intended - can't enforce due to a: convincing compiler, and

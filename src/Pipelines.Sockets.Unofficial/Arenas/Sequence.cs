@@ -12,7 +12,7 @@ namespace Pipelines.Sockets.Unofficial.Arenas
     /// <summary>
     /// Represents a Sequence without needing to know the type at compile-time
     /// </summary>
-    public readonly struct Sequence : IEquatable<Sequence>
+    internal readonly struct Sequence : IEquatable<Sequence>
     {
         // the meaning of the fields here is identical to with Sequence<T>,
         // with the distinction that in the single-segment scenario,
@@ -166,7 +166,7 @@ namespace Pipelines.Sockets.Unofficial.Arenas
     /// <summary>
     /// Represents a (possibly non-contiguous) region of memory; the read/write cousin or ReadOnlySequence-T
     /// </summary>
-    public readonly partial struct Sequence<T> : IEquatable<Sequence<T>>
+    internal readonly partial struct Sequence<T> : IEquatable<Sequence<T>>
     {
         private readonly object _startObj, _endObj;
         private readonly int __startOffsetAndArrayFlag, __endOffsetOrLength;

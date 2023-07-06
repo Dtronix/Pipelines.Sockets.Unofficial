@@ -42,7 +42,7 @@ namespace Pipelines.Sockets.Unofficial.Arenas
     /// A memory-owner that provides direct access to the root reference
     /// </summary>
     [CLSCompliant(false)]
-    public interface IPinnedMemoryOwner<T> : IMemoryOwner<T>
+    internal interface IPinnedMemoryOwner<T> : IMemoryOwner<T>
     {
         /// <summary>
         /// The root reference of the block, or a null-pointer if the data should not be considered pinned
@@ -58,12 +58,17 @@ namespace Pipelines.Sockets.Unofficial.Arenas
     /// <summary>
     /// Represents an abstract chained segment of mutable memory
     /// </summary>
-    public abstract class SequenceSegment<T> : ReadOnlySequenceSegment<T>, ISegment, IMemoryOwner<T>
+    internal abstract class SequenceSegment<T> : ReadOnlySequenceSegment<T>, ISegment, IMemoryOwner<T>
     {
         /// <summary>
         /// Creates a new SequenceSegment, optionally attaching the segment to an existing chain
         /// </summary>
         protected SequenceSegment(Memory<T> memory, SequenceSegment<T> previous = null)
+        {
+            Setup(memory, previous);
+        }
+
+        protected void Setup(Memory<T> memory, SequenceSegment<T> previous = null)
         {
             if (previous is not null)
             {

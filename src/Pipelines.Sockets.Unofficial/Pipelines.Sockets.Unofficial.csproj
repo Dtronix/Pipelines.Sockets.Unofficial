@@ -3,7 +3,7 @@
   <PropertyGroup>
     <!-- note: net46 causes binding redirect problems on System.Buffers; see conversation https://github.com/mgravell/Pipelines.Sockets.Unofficial/pull/4 -->
     <TargetFrameworks>net461;net472;netstandard2.0;netstandard2.1;netcoreapp3.1;net5.0</TargetFrameworks>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <DelaySign>false</DelaySign>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssemblyOriginatorKeyFile>Pipelines.Sockets.Unofficial.snk</AssemblyOriginatorKeyFile>
@@ -31,5 +31,19 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="System.IO.Pipelines" Version="5.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>Benchmark</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>AotTests</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>Pipelines.Sockets.Unofficial.Tests</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>Toys</_Parameter1>
+    </AssemblyAttribute>
   </ItemGroup>
 </Project>

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Pipelines.Sockets.Unofficial
 {
-    public partial class SocketConnection
+    internal partial class SocketConnection
     {
         /// <summary>
         /// The total number of bytes sent to the socket

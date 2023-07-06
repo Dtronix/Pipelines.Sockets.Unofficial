@@ -13,7 +13,7 @@ namespace Pipelines.Sockets.Unofficial.Threading
     /// <summary>
     /// A mutex primitive that can be waited or awaited, with support for schedulers
     /// </summary>
-    public sealed partial class MutexSlim
+    internal sealed partial class MutexSlim
     {
         /*
          * - must have single lock-token-holder (mutex)

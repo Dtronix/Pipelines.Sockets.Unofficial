@@ -8,7 +8,7 @@ namespace Pipelines.Sockets.Unofficial
     /// Indicates that a connection was reset
     /// </summary>
     [Serializable]
-    public sealed class ConnectionResetException : IOException
+    internal sealed class ConnectionResetException : IOException
     {
         /// <summary>
         /// Create a new ConnectionResetException instance

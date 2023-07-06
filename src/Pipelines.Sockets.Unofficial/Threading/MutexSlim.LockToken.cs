@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Pipelines.Sockets.Unofficial.Threading
 {
-    public partial class MutexSlim
+    internal partial class MutexSlim
     {
         /// <summary>
         /// The result of a Wait/WaitAsync operation on MutexSlim; the caller *must* check Success to see whether the mutex was obtained

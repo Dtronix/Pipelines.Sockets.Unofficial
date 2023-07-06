@@ -5,7 +5,7 @@ namespace Pipelines.Sockets.Unofficial
     /// <summary>
     /// A duplex pipe that measures the bytes sent/received
     /// </summary>
-    public interface IMeasuredDuplexPipe : IDuplexPipe
+    internal interface IMeasuredDuplexPipe : IDuplexPipe
     {
         /// <summary>
         /// The total number of bytes sent to the pipe

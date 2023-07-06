@@ -8,7 +8,7 @@ namespace Pipelines.Sockets.Unofficial
     /// Indicates that a connection was aborted
     /// </summary>
     [Serializable]
-    public sealed class ConnectionAbortedException : OperationCanceledException
+    internal sealed class ConnectionAbortedException : OperationCanceledException
     {
         /// <summary>
         /// Create a new instance of ConnectionAbortedException

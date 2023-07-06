@@ -5,7 +5,7 @@ namespace Pipelines.Sockets.Unofficial.Arenas
     /// <summary>
     /// Provides common retention policies
     /// </summary>
-    public static class RetentionPolicy
+    internal static class RetentionPolicy
     {
         private const float DefaultFactor = 0.9F;
 

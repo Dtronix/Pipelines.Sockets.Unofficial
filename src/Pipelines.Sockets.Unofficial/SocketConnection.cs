@@ -15,7 +15,7 @@ namespace Pipelines.Sockets.Unofficial
     /// <summary>
     /// When possible, determines how the pipe first reached a close state
     /// </summary>
-    public enum PipeShutdownKind
+    internal enum PipeShutdownKind
     {
         // 0**: things to do with the pipe
         /// <summary>
@@ -109,7 +109,7 @@ namespace Pipelines.Sockets.Unofficial
     /// <summary>
     /// Reperesents a duplex pipe over managed sockets
     /// </summary>
-    public sealed partial class SocketConnection : IMeasuredDuplexPipe, IDisposable
+    internal sealed partial class SocketConnection : IMeasuredDuplexPipe, IDisposable
     {
 #if DEBUG
         ~SocketConnection() => Helpers.Incr(Counter.SocketConnectionCollectedWithoutDispose);

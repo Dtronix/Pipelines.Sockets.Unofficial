@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace Pipelines.Sockets.Unofficial.Arenas
 {
-    public partial struct Sequence<T>
+    internal partial struct Sequence<T>
     {
         /// <summary>
         /// Allows a sequence to be enumerated as spans

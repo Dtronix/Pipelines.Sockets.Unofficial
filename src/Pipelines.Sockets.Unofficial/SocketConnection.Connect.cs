@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Pipelines.Sockets.Unofficial
 {
-    public partial class SocketConnection
+    internal partial class SocketConnection
     {
         /// <summary>
         /// Open a new or existing socket as a client

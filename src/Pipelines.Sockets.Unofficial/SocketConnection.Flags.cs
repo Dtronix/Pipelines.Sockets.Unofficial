@@ -7,7 +7,7 @@ namespace Pipelines.Sockets.Unofficial
     /// Flags that influence the behavior of SocketConnection
     /// </summary>
     [Flags]
-    public enum SocketConnectionOptions
+    internal enum SocketConnectionOptions
     {
         /// <summary>
         /// Default
@@ -33,7 +33,8 @@ namespace Pipelines.Sockets.Unofficial
         /// </summary>
         InlineConnect = 1 << 3,
     }
-    public partial class SocketConnection
+
+    internal partial class SocketConnection
     {
         private SocketConnectionOptions SocketConnectionOptions { get; }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

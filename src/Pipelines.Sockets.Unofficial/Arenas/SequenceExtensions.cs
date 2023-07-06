@@ -9,16 +9,16 @@ namespace Pipelines.Sockets.Unofficial.Arenas
     /// <summary>
     /// Similar to Func, but with "in" parameters
     /// </summary>
-    public delegate TResult Projection<T, out TResult>(in T x);
+    internal delegate TResult Projection<T, out TResult>(in T x);
     /// <summary>
     /// Similar to Func, but with "in" parameters
     /// </summary>
-    public delegate TResult Projection<T1, T2, out TResult>(in T1 x1, in T2 x2);
+    internal delegate TResult Projection<T1, T2, out TResult>(in T1 x1, in T2 x2);
 
     /// <summary>
     /// Provides utility methods for working with sequences
     /// </summary>
-    public static class SequenceExtensions
+    internal static class SequenceExtensions
     {
         /// <summary>
         /// Create an array with the contents of the sequence; if possible, an existing

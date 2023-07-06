@@ -4,7 +4,7 @@ using System.Threading;
 
 namespace Pipelines.Sockets.Unofficial.Threading
 {
-    public partial class MutexSlim
+    internal partial class MutexSlim
     {
         private sealed class SyncPendingLockToken : IPendingLockToken
         {

@@ -10,7 +10,7 @@ namespace Pipelines.Sockets.Unofficial.Arenas
     /// <summary>
     /// Allocates blocks of memory
     /// </summary>
-    public abstract class Allocator<T>
+    internal abstract class Allocator<T>
     {
         /// <summary>
         /// Allocate a new block
@@ -30,7 +30,7 @@ namespace Pipelines.Sockets.Unofficial.Arenas
     /// <summary>
     /// An allocator that rents memory from the array-pool provided, returning them to the pool when done
     /// </summary>
-    public sealed class ArrayPoolAllocator<T> : Allocator<T>
+    internal sealed class ArrayPoolAllocator<T> : Allocator<T>
     {
         private readonly ArrayPool<T> _pool;
 
@@ -185,7 +185,7 @@ namespace Pipelines.Sockets.Unofficial.Arenas
     /// <summary>
     /// An allocator that allocates unmanaged memory, releasing the memory back to the OS when done
     /// </summary>
-    public unsafe sealed class UnmanagedAllocator<T> : Allocator<T>
+    internal unsafe sealed class UnmanagedAllocator<T> : Allocator<T>
     {
         // where T : unmanaged
         // is intended - can't enforce due to a: convincing compiler, and

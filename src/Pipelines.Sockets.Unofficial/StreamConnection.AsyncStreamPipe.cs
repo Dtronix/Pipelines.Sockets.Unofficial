@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Pipelines.Sockets.Unofficial
 {
-    public static partial class StreamConnection
+    internal static partial class StreamConnection
     {
         private sealed class AsyncStreamPipe : IMeasuredDuplexPipe
         {

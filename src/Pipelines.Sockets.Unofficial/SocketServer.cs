@@ -1,4 +1,4 @@
-using Pipelines.Sockets.Unofficial.Internal;
+﻿using Pipelines.Sockets.Unofficial.Internal;
 using System;
 using System.IO.Pipelines;
 using System.Net;
@@ -10,7 +10,7 @@ namespace Pipelines.Sockets.Unofficial
     /// <summary>
     /// Represents a multi-client socket-server capable of dispatching pipeline clients
     /// </summary>
-    public abstract class SocketServer : IDisposable
+    internal abstract class SocketServer : IDisposable
     {
         private Socket _listener;
 

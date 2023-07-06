@@ -12,7 +12,7 @@ namespace Pipelines.Sockets.Unofficial
     /// An implementation of a pipe-scheduler that uses a dedicated pool of threads, deferring to
     /// the thread-pool if that becomes too backlogged
     /// </summary>
-    public sealed class DedicatedThreadPoolPipeScheduler : PipeScheduler, IDisposable
+    internal sealed class DedicatedThreadPoolPipeScheduler : PipeScheduler, IDisposable
     {
         /// <summary>
         /// Reusable shared scheduler instance

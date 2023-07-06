@@ -6,7 +6,7 @@ using System.Threading.Tasks.Sources;
 
 namespace Pipelines.Sockets.Unofficial.Threading
 {
-    public partial class MutexSlim
+    internal partial class MutexSlim
     {
         private sealed class AsyncDirectPendingLockSlab : IAsyncPendingLockToken, IValueTaskSource<LockToken>
         {

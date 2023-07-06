@@ -2,6 +2,8 @@
 using Pipelines.Sockets.Unofficial.Internal;
 using System;
 using System.Buffers;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -13,7 +15,7 @@ namespace Pipelines.Sockets.Unofficial.Buffers
     /// <summary>
     /// Represents a <typeparamref name="T"/> with lifetime management over the data
     /// </summary>
-    public readonly struct Owned<T> : IDisposable
+    internal readonly struct Owned<T> : IDisposable
     {
         private readonly Action<T> _onDispose;
         private readonly T _value;
@@ -54,7 +56,7 @@ namespace Pipelines.Sockets.Unofficial.Buffers
     /// <summary>
     /// Implements a buffer-writer over arbitrary memory
     /// </summary>
-    public abstract partial class BufferWriter<T> : IDisposable, IBufferWriter<T>
+    internal abstract partial class BufferWriter<T> : IDisposable, IBufferWriter<T>
     {
         private protected int BlockSize { get; }
 
@@ -187,6 +189,28 @@ namespace Pipelines.Sockets.Unofficial.Buffers
             if (_headOffset != 0) _head.AddRef();
 
             return new Owned<ReadOnlySequence<T>>(value, RefCountedSegment.s_Release);
+        }
+
+        /// <summary>
+        /// Deallocates the passed sequence. This is beneficial when utilizing 
+        /// the <see cref="GetBuffer"/> method and when the sequence is no longer needed.
+        /// </summary>
+        /// <param name="value">The sequence to be flushed and disposed.</param>
+        public void Deallocate(in Sequence<T> value)
+        {
+            if (value.IsEmpty) return; // "all of nothing"
+            var end = value.End;
+
+            _head = (RefCountedSegment)end.GetObject();
+            _headOffset = end.GetInteger();
+            // we have some capacity left in the head; we'll keep that one, so:
+            // increment the tail and continue from there
+            // this is a short-cut for:
+            // - AddRef on all the elements in the result
+            // - Release on everything in the old chain *except* the new head (if it will be shared)
+            if (_headOffset != 0) _head.AddRef();
+
+            RefCountedSegment.s_Release(value);
         }
 
         /// <summary>
@@ -377,15 +401,22 @@ namespace Pipelines.Sockets.Unofficial.Buffers
                 IncrLiveCount();
             }
 
+            public new void Setup(Memory<T> memory, RefCountedSegment previous)
+            {
+                base.Setup(memory, previous);
+                _count = 1;
+                IncrLiveCount();
+            }
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void Release()
             {
                 if (Volatile.Read(ref _count) > 0 && Interlocked.Decrement(ref _count) == 0)
                 {
                     DecrLiveCount();
-                    Memory = default;
                     DetachNext(); // break the chain, in case of dangling references
                     ReleaseImpl();
+                    Memory = default;
                 }
             }
 
@@ -447,13 +478,30 @@ namespace Pipelines.Sockets.Unofficial.Buffers
         internal sealed class ArrayPoolBufferWriter : BufferWriter<T>
         {
             private ArrayPool<T> _arrayPool;
+
+            private readonly Stack<ArrayPoolRefCountedSegment> _segmentPool = new ();
             private protected override RefCountedSegment CreateNewSegment(RefCountedSegment previous, int size)
-                => CreateNewSegment(_arrayPool, previous, size);
+            {
+                var array = _arrayPool.Rent(size);
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP
+                if (_segmentPool.TryPop(out var segment))
+                {
+#else
+                if (_segmentPool.Count > 0)
+                {
+                    var segment = _segmentPool.Pop();
+#endif
+                    segment.Setup(array, previous);
+                    return segment;
+                }
+
+                return new ArrayPoolRefCountedSegment(_segmentPool, _arrayPool, array, previous);
+            }
 
             internal static RefCountedSegment CreateNewSegment(ArrayPool<T> arrayPool, RefCountedSegment previous, int size)
             {
                 var array = arrayPool.Rent(size);
-                return new ArrayPoolRefCountedSegment(arrayPool, array, previous);
+                return new ArrayPoolRefCountedSegment(null, arrayPool, array, previous);
             }
 
             public ArrayPoolBufferWriter(ArrayPool<T> arrayPool, int blockSize)
@@ -470,17 +518,24 @@ namespace Pipelines.Sockets.Unofficial.Buffers
 
             private sealed class ArrayPoolRefCountedSegment : RefCountedSegment
             {
+                private readonly Stack<ArrayPoolRefCountedSegment>? _segmentPool;
+
                 private readonly ArrayPool<T> _arrayPool;
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public ArrayPoolRefCountedSegment(ArrayPool<T> arrayPool, Memory<T> memory, RefCountedSegment previous)
+                public ArrayPoolRefCountedSegment(Stack<ArrayPoolRefCountedSegment>? segmentPool, ArrayPool<T> arrayPool, Memory<T> memory, RefCountedSegment previous)
                     : base(memory, previous)
-                    => _arrayPool = arrayPool;
+                {
+                    _segmentPool = segmentPool;
+                    _arrayPool = arrayPool;
+                }
 
                 protected override void ReleaseImpl()
                 {
                     T[] arr;
                     if (MemoryMarshal.TryGetArray<T>(Memory, out var segment) && (arr = segment.Array) is not null)
                         _arrayPool.Return(arr);
+
+                    _segmentPool?.Push(this);
                 }
             }
         }

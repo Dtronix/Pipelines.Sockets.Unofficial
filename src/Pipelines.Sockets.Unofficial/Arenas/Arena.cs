@@ -12,7 +12,7 @@ namespace Pipelines.Sockets.Unofficial.Arenas
     /// <summary>
     /// Options that configure the behaviour of an arena
     /// </summary>
-    public sealed class ArenaOptions
+    internal sealed class ArenaOptions
     {
         /// <summary>
         /// The default arena configuration
@@ -56,7 +56,7 @@ namespace Pipelines.Sockets.Unofficial.Arenas
     /// <summary>
     /// Provides facilities to create new type-specific allocators for use in an arena
     /// </summary>
-    public class AllocatorFactory
+    internal class AllocatorFactory
     {
         /// <summary>
         /// The default allocator factory
@@ -103,7 +103,7 @@ namespace Pipelines.Sockets.Unofficial.Arenas
     /// <summary>
     /// Represents a typed subset of data within an arena
     /// </summary>
-    public abstract class OwnedArena<T> : IArena<T>
+    internal abstract class OwnedArena<T> : IArena<T>
     {
         Type IArena.ElementType => typeof(T);
 
@@ -338,7 +338,7 @@ namespace Pipelines.Sockets.Unofficial.Arenas
     /// <summary>
     /// An arena allocator that can allocate sequences for multiple data types
     /// </summary>
-    public sealed class Arena : IDisposable
+    internal sealed class Arena : IDisposable
     {
         internal ArenaOptions Options { get; }
         internal AllocatorFactory Factory { get; private set; }

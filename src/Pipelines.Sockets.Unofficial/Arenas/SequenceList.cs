@@ -11,7 +11,7 @@ namespace Pipelines.Sockets.Unofficial.Arenas
     /// <summary>
     /// A list-like reference type that can be used in most APIs that expect a list object
     /// </summary>
-    public class SequenceList<T> : IList<T>, IReadOnlyList<T>, IList
+    internal class SequenceList<T> : IList<T>, IReadOnlyList<T>, IList
     {
         private static readonly SequenceList<T> s_empty = new SequenceList<T>(default);
 

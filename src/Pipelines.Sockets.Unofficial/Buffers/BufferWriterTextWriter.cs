@@ -11,7 +11,7 @@ namespace Pipelines.Sockets.Unofficial.Buffers
     /// <summary>
     /// Implements a <see cref="TextWriter"/> over an <see cref="IBufferWriter{T}"/>
     /// </summary>
-    public sealed class BufferWriterTextWriter : TextWriter
+    internal sealed class BufferWriterTextWriter : TextWriter
     {
         /// <summary>
         /// Creates a new instance

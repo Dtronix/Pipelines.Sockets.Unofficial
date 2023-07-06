@@ -17,7 +17,7 @@ namespace Pipelines.Sockets.Unofficial
     /// <summary>
     /// Awaitable SocketAsyncEventArgs, where awaiting the args yields either the BytesTransferred or throws the relevant socket exception
     /// </summary>
-    public class SocketAwaitableEventArgs : SocketAsyncEventArgs, ICriticalNotifyCompletion
+    internal class SocketAwaitableEventArgs : SocketAsyncEventArgs, ICriticalNotifyCompletion
     {
         /// <summary>
         /// Abort the current async operation (and prevent future operations)
