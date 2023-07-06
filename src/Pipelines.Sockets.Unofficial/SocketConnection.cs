@@ -1,4 +1,5 @@
-﻿using Pipelines.Sockets.Unofficial.Internal;
+﻿#nullable disable
+using Pipelines.Sockets.Unofficial.Internal;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -118,6 +119,7 @@ namespace Pipelines.Sockets.Unofficial
         /// <summary>
         /// Check that all dependencies are available
         /// </summary>
+        [Conditional("DEBUG")]
         public static void AssertDependencies() => Helpers.AssertDependencies();
 
         private int _socketShutdownKind;

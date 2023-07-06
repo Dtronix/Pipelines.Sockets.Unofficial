@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable disable
+using System;
 
 namespace Pipelines.Sockets.Unofficial.Arenas
 {

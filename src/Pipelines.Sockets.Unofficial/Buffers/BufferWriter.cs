@@ -1,4 +1,5 @@
-﻿using Pipelines.Sockets.Unofficial.Arenas;
+﻿#nullable disable
+using Pipelines.Sockets.Unofficial.Arenas;
 using Pipelines.Sockets.Unofficial.Internal;
 using System;
 using System.Buffers;

@@ -1,4 +1,5 @@
-﻿using System.IO.Pipelines;
+﻿#nullable disable
+using System.IO.Pipelines;
 
 namespace Pipelines.Sockets.Unofficial
 {

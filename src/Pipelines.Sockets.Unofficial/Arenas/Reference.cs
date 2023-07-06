@@ -1,4 +1,5 @@
-﻿using Pipelines.Sockets.Unofficial.Internal;
+﻿#nullable disable
+using Pipelines.Sockets.Unofficial.Internal;
 using System;
 using System.Buffers;
 using System.Runtime.CompilerServices;

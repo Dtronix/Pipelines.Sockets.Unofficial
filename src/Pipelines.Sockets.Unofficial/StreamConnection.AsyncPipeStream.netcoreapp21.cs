@@ -1,4 +1,5 @@
-﻿#if SOCKET_STREAM_BUFFERS
+﻿#nullable disable
+#if SOCKET_STREAM_BUFFERS
 using System;
 using System.Buffers;
 using System.Collections.Generic;
