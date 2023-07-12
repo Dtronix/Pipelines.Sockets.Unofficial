@@ -211,7 +211,47 @@ namespace Pipelines.Sockets.Unofficial.Buffers
             // - Release on everything in the old chain *except* the new head (if it will be shared)
             if (_headOffset != 0) _head.AddRef();
 
-            RefCountedSegment.s_Release(value);
+            // Release the refcounted segments back to the pool.
+            RefCountedSegment.Release(value);
+        }
+
+        /// <summary>
+        /// Releases the specified number of bytes from the head of the buffer.
+        /// </summary>
+        /// <param name="count">Number of bytes to release</param>
+        public void ReleaseTo(int count)
+        {
+            if (count < 1)
+                return;
+
+            var node = _head;
+
+            count += _headOffset;
+
+            if (node is not null && count < node.Length)
+            {
+                _headOffset = count;
+                return;
+            }
+
+            do
+            {
+                if (count < node.Length | // inside this segment
+                    (node.Next is null & count == node.Length)) // EOF in final segment
+                {
+                    break;
+                }
+
+                // This node has entirely been used.  Release the data.
+                count -= node.Length;
+                var next = node.Next;
+                node.Release();
+                node = Unsafe.As<RefCountedSegment>(next);
+            } while (node is not null);
+
+
+            _head = node;
+            _headOffset = count;
         }
 
         /// <summary>
