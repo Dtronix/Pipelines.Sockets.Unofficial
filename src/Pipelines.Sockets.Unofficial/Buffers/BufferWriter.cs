@@ -4,8 +4,10 @@ using Pipelines.Sockets.Unofficial.Internal;
 using System;
 using System.Buffers;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -252,6 +254,28 @@ namespace Pipelines.Sockets.Unofficial.Buffers
 
             _head = node;
             _headOffset = count;
+        }
+
+        public void ReleaseTo(SequencePosition position)
+        {
+            if (position.GetObject() is not RefCountedSegment target)
+                return;
+
+            var node = _head;
+
+            while (true)
+            {
+                if (node == target || (node.Next is null)) // EOF or target
+                    break;
+
+                // This node has entirely been used.  Release the data.
+                var next = node.Next;
+                node.Release();
+                node = Unsafe.As<RefCountedSegment>(next);
+            }
+
+            _head = node;
+            _headOffset = position.GetInteger();
         }
 
         /// <summary>
@@ -520,12 +544,12 @@ namespace Pipelines.Sockets.Unofficial.Buffers
         {
             private ArrayPool<T> _arrayPool;
 
-            private readonly Stack<ArrayPoolRefCountedSegment> _segmentPool = new ();
+            private readonly ConcurrentBag<ArrayPoolRefCountedSegment> _segmentPool = new ();
             private protected override RefCountedSegment CreateNewSegment(RefCountedSegment previous, int size)
             {
                 var array = _arrayPool.Rent(size);
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP
-                if (_segmentPool.TryPop(out var segment))
+                if (_segmentPool.TryTake(out var segment))
                 {
 #else
                 if (_segmentPool.Count > 0)
@@ -559,11 +583,11 @@ namespace Pipelines.Sockets.Unofficial.Buffers
 
             private sealed class ArrayPoolRefCountedSegment : RefCountedSegment
             {
-                private readonly Stack<ArrayPoolRefCountedSegment> _segmentPool;
+                private readonly ConcurrentBag<ArrayPoolRefCountedSegment> _segmentPool;
 
                 private readonly ArrayPool<T> _arrayPool;
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public ArrayPoolRefCountedSegment(Stack<ArrayPoolRefCountedSegment> segmentPool, ArrayPool<T> arrayPool, Memory<T> memory, RefCountedSegment previous)
+                public ArrayPoolRefCountedSegment(ConcurrentBag<ArrayPoolRefCountedSegment> segmentPool, ArrayPool<T> arrayPool, Memory<T> memory, RefCountedSegment previous)
                     : base(memory, previous)
                 {
                     _segmentPool = segmentPool;
@@ -576,7 +600,7 @@ namespace Pipelines.Sockets.Unofficial.Buffers
                     if (MemoryMarshal.TryGetArray<T>(Memory, out var segment) && (arr = segment.Array) is not null)
                         _arrayPool.Return(arr);
 
-                    _segmentPool?.Push(this);
+                    _segmentPool?.Add(this);
                 }
             }
         }
