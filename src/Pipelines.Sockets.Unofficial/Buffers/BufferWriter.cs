@@ -3,11 +3,8 @@ using Pipelines.Sockets.Unofficial.Arenas;
 using Pipelines.Sockets.Unofficial.Internal;
 using System;
 using System.Buffers;
-using System.Collections;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.Metrics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -115,6 +112,23 @@ namespace Pipelines.Sockets.Unofficial.Buffers
         /// Release all resources associate with this instance
         /// </summary>
         public virtual void Dispose() => DiscardChain();
+
+        /// <summary>
+        /// Release all resources associate with this instance and reset it to its initial state.
+        /// </summary>
+        public virtual void Reset()
+        {
+            // release anything that is in the pending buffer
+            var node = _head;
+            _head = _tail = _final = null;
+            _tailRemaining = _tailOffset = _headOffset = 0;
+            while (node is not null)
+            {
+                var next = (RefCountedSegment)node.Next; // need to do this *first*, since Release nukes it
+                node.Release();
+                node = next;
+            }
+        }
 
         private void DiscardChain()
         {
@@ -579,6 +593,10 @@ namespace Pipelines.Sockets.Unofficial.Buffers
             {
                 _arrayPool = null;
                 base.Dispose();
+            }
+            public override void Reset()
+            {
+                base.Reset();
             }
 
             private sealed class ArrayPoolRefCountedSegment : RefCountedSegment
